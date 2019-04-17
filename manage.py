@@ -26,7 +26,7 @@ def info():
     return render_template('info.html')
 
 
-@app.route('/index/life/', methods=['GET'])
+@app.route('/index/life.html/', methods=['GET'])
 def life():
     return render_template('life.html')
 
