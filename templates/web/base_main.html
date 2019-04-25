@@ -1,0 +1,34 @@
+{% extends 'web/base.html' %}
+
+{% block header %}
+<header>
+    <!--menu begin-->
+    <div class="menu">
+        <nav class="nav" id="topnav">
+            <h1 class="logo"><a href="{{ url_for('web.index') }}">王碧波的博客</a></h1>
+            <li><a href="{{ url_for('web.index') }}">网站首页</a></li>
+            <li><a href="share.html">栏目分类</a>
+                <ul class="sub-nav">
+                    {% for cate in cates %}
+                    <li><a href="{{ url_for('web.category', id=cate.cat_id) }}">{{ cate.cat_name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><a href="{{ url_for('web.about') }}">关于我</a></li>
+            <!--search begin-->
+            <div id="search_bar" class="search_bar">
+                <form id="searchform" action="[!--news.url--]e/search/index.php" method="post" name="searchform">
+                    <input class="input" placeholder="想搜点什么呢..." type="text" name="keyboard" id="keyboard">
+                    <input type="hidden" name="show" value="title"/>
+                    <input type="hidden" name="tempid" value="1"/>
+                    <input type="hidden" name="tbname" value="news">
+                    <input type="hidden" name="Submit" value="搜索"/>
+                    <span class="search_ico"></span>
+                </form>
+            </div>
+            <!--search end-->
+        </nav>
+    </div>
+    <!--menu end-->
+</header>
+{% endblock %}

@@ -1,51 +1,29 @@
 import redis
-from flask import Flask, request, render_template, session, make_response, url_for
+from flask import Flask
 from flask_script import Manager
 from flask_session import Session
 
+from web.views import blue_web
+from back.views import blue_back
+from back.models import db
+
 app = Flask(__name__)
 
+app.register_blueprint(blueprint=blue_web, url_prefix='/web')
+app.register_blueprint(blueprint=blue_back, url_prefix='/back')
 
-@app.route('/index/', methods=['GET', 'POST'])
-def index():
-    return render_template('index.html')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:641212@127.0.0.1:3306/myblog'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.secret_key = 'sldfijie2983r9102304hvsdmvao3ir0u9'
 
-@app.route('/index/about.html/', methods=['GET', 'POST'])
-def about():
-    return render_template('about.html')
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_REDIS'] = redis.Redis(host='127.0.0.1', port=6379)
 
+Session(app)
+db.init_app(app)
 
-@app.route('/index/gbook/', methods=['GET'])
-def gbook():
-    return render_template('gbook.html')
-
-
-@app.route('/index/info/', methods=['GET'])
-def info():
-    return render_template('info.html')
-
-
-@app.route('/index/life.html/', methods=['GET'])
-def life():
-    return render_template('life.html')
-
-
-@app.route('/index/list/', methods=['GET'])
-def index_list():
-    return render_template('list,html')
-
-
-@app.route('/index/share/', methods=['GET'])
-def share():
-    return render_template('share.html')
-
-
-@app.route('/index/time/', methods=['GET'])
-def index_time():
-    return render_template('time.html')
-
+manage = Manager(app)
 
 if __name__ == '__main__':
-    manage = Manager(app)
     manage.run()

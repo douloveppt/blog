@@ -1,0 +1,112 @@
+{% extends 'back/base_main.html' %}
+
+{% block head %}
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>写文章 - 异清轩博客管理系统</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='back/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='back/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='back/css/font-awesome.min.css') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='back/images/icon/icon.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='back/images/icon/favicon.ico') }}">
+    <script src="{{ url_for('static', filename='back/js/jquery-2.1.4.min.js') }}"></script>
+</head>
+{% endblock %}
+
+{% block others %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+    <div class="row">
+        <form action="" method="post" class="add-article-form">
+            <div class="col-md-9">
+                <h1 class="page-header">修改文章</h1>
+                <div class="form-group">
+                    <label for="article-title" class="sr-only">标题</label>
+                    <input type="text" id="article-title" name="title" class="form-control"
+                           value="{{ title }}" required autofocus autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="article-content" class="sr-only">内容</label>
+                    <script id="article-content" name="content" type="text/plain">{{ content | safe }}</script>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h1 class="page-header">操作</h1>
+                <div class="add-article-box">
+                    <h2 class="add-article-box-title"><span>栏目</span></h2>
+                    <div class="add-article-box-content">
+                        <ul class="category-list">
+                            {% for cate in cates %}
+                            <li>
+                                <label>
+                                    <input name="category" type="radio" value="{{ cate.cat_id }}" checked="{{ cate }}">
+                                    {{ cate.cat_name }} <em class="hidden-md">( 栏目ID: <span>{{ cate.cat_id }}</span>
+                                    )</em></label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="add-article-box">
+                    <h2 class="add-article-box-title"><span>标签</span></h2>
+                    <div class="add-article-box-content">
+                        <input type="text" class="form-control" placeholder="输入新标签" name="tags"
+                               autocomplete="off">
+                        <span class="prompt-text">多个标签请用英文逗号,隔开</span></div>
+                </div>
+                <div class="add-article-box">
+                    <h2 class="add-article-box-title"><span>发布</span></h2>
+                    <div class="add-article-box-content">
+                        <p><label>作者：</label><span class="article-status-display">{{ username }}</span></p>
+                        <p><label>发布于：</label><span class="article-time-display">{{ date }}</span>
+                        </p>
+                    </div>
+                    <div class="add-article-box-footer">
+                        <button class="btn btn-primary" type="submit" name="submit">发布</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<script src="{{ url_for('static', filename='back/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='back/js/admin-scripts.js') }}"></script>
+<script src="{{ url_for('static', filename='back/lib/ueditor/ueditor.config.js') }}"></script>
+<script src="{{ url_for('static', filename='back/lib/ueditor/ueditor.all.min.js') }}"></script>
+<script src="{{ url_for('static', filename='back/lib/ueditor/lang/zh-cn/zh-cn.js') }}"></script>
+<script id="uploadEditor" type="text/plain" style="display:none;"></script>
+<script
+type = "text/javascript" >
+var editor = UE.getEditor('article-content');
+window.onresize = function () {
+    window.location.reload();
+}
+var _uploadEditor;
+$(function () {
+    _uploadEditor = UE.getEditor('uploadEditor');
+    _uploadEditor.ready(function () {
+        _uploadEditor.hide();
+        _uploadEditor.addListener('beforeInsertImage', function (t, arg) {
+            $("#pictureUpload").attr("value", arg[0].src);
+        })
+        _uploadEditor.addListener('afterUpfile', function (t, arg) {
+            $("#fileUpload").attr("value", _uploadEditor.options.filePath + arg[0].url);
+        })
+    });
+});
+$('#upImage').click(function () {
+    var myImage = _uploadEditor.getDialog("insertimage");
+    myImage.open();
+});
+
+function upFiles() {
+    var myFiles = _uploadEditor.getDialog("attachment");
+    myFiles.open();
+}
+</script>
+{% endblock %}

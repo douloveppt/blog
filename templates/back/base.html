@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+
+{% block head %}
+{% endblock %}
+
+<body class="user-select">
+<section class="container-fluid">
+    {% block header %}
+    {% endblock %}
+    <div class="row">
+        {% block menu %}
+        {% endblock %}
+
+        {% block others %}
+        {% endblock %}
+    </div>
+</section>
+{% block body %}
+{% endblock %}
+</body>
+</html>
