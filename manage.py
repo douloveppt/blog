@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.register_blueprint(blueprint=blue_web, url_prefix='/web')
 app.register_blueprint(blueprint=blue_back, url_prefix='/back')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:641212@127.0.0.1:3306/myblog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@127.0.0.1:3306/myblog'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.secret_key = 'sldfijie2983r9102304hvsdmvao3ir0u9'
