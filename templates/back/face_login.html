@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>异清轩博客管理系统</title>
+    <title>人脸识别登录系统</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='back/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='back/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='back/css/login.css') }}">
@@ -18,26 +18,33 @@
 
 {% block body %}
 <div class="container">
+    <div style="float: left">
+        <div>
+            <video id="video" height="200px;" width="200px;"></video>
+        </div>
+        <div>
+            <canvas id="canvas" height="200px;" width="200px;"></canvas>
+        </div>
+    </div>
     <div class="siteIcon"><img src="{{ url_for('static', filename='back/images/icon/icon.png') }}" alt=""
                                data-toggle="tooltip" data-placement="top"
                                title="欢迎使用异清轩博客管理系统" draggable="false"/></div>
     <form action="" method="post" autocomplete="off" class="form-signin">
+        <p><input type="hidden" id="face" name="face"></p>
+
         {{ error }}
-        <h2 class="form-signin-heading">管理员登录</h2>
+        <h2 class="form-signin-heading">登录</h2>
         <label for="userName" class="sr-only">用户名</label>
         <input type="text" id="userName" name="username" class="form-control" placeholder="请输入用户名" required autofocus
                autocomplete="off" maxlength="10">
-        <label for="userPwd" class="sr-only">密码</label>
-        <input type="password" id="userPwd" name="password" class="form-control" placeholder="请输入密码" required
-               autocomplete="off" maxlength="18">
+        <input type="button" value="开启摄像头" onclick="getMedia()">
+        <input type="button" value="采集人脸信息" onclick="takePhoto()">
+
         <a href="#">
             <button class="btn btn-lg btn-primary btn-block" type="submit" id="signinSubmit">登录</button>
         </a>
     </form>
-    <div class="footer">
-        <p style="float: left"><a href="{{ url_for('back.face_login') }}">点击人脸识别登录</a></p>
-        <p><a href="{{ url_for('back.register') }}" data-toggle="tooltip" data-placement="left" title="愣着干嘛？还不赶紧注册一个!">还没有账号？</a></p>
-    </div>
+
 </div>
 <script src="{{ url_for('static', filename='back/js/bootstrap.min.js') }}"></script>
 <script>
@@ -57,5 +64,29 @@
             $(this).text('请稍后...');
         }
     });
+</script>
+<script>
+    function getMedia() {
+        let constraints = {
+            video: {width: 200, height: 200},
+            audio: true
+        };
+        let video = document.getElementById("video");
+        let promise = navigator.mediaDevices.getUserMedia(constraints);
+        promise.then(function (MediaStream) {
+            video.srcObject = MediaStream;
+            video.play();
+        });
+    }
+
+    function takePhoto() {
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, 200, 200);
+        var face = document.getElementById("face");
+        var canvas1 = document.getElementById('canvas');
+        face.value = canvas1.toDataURL('image/png')
+    }
 </script>
 {% endblock %}

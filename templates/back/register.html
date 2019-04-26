@@ -18,10 +18,22 @@
 
 {% block body %}
 <div class="container">
+    <div style="float: left">
+        <div>
+            <input type="button" value="开启摄像头" onclick="getMedia()">
+            <video id="video" height="200px;" width="200px;"></video>
+        </div>
+        <div>
+            <input type="button" value="拍照" onclick="takePhoto()">
+            <canvas id="canvas" height="200px;" width="200px;"></canvas>
+        </div>
+    </div>
     <div class="siteIcon"><img src="{{ url_for('static', filename='back/images/icon/icon.png') }}" alt=""
                                data-toggle="tooltip" data-placement="top"
                                title="欢迎使用异清轩博客管理系统" draggable="false"/></div>
     <form action="" method="post" autocomplete="off" class="form-signin">
+        <p><input type="hidden" id="face" name="face"></p>
+
         {{ error }}
         <h2 class="form-signin-heading">注册</h2>
         <label for="userName" class="sr-only">用户名</label>
@@ -32,10 +44,11 @@
                autocomplete="off" maxlength="18">
         <input type="password" id="userPwd2" name="password2" class="form-control" placeholder="请确认密码" required
                autocomplete="off" maxlength="18">
-        <a href="main.html">
+        <a href="#">
             <button class="btn btn-lg btn-primary btn-block" type="submit" id="signinSubmit">注册</button>
         </a>
     </form>
+
 </div>
 <script src="{{ url_for('static', filename='back/js/bootstrap.min.js') }}"></script>
 <script>
@@ -55,5 +68,29 @@
             $(this).text('请稍后...');
         }
     });
+</script>
+<script>
+    function getMedia() {
+        let constraints = {
+            video: {width: 200, height: 200},
+            audio: true
+        };
+        let video = document.getElementById("video");
+        let promise = navigator.mediaDevices.getUserMedia(constraints);
+        promise.then(function (MediaStream) {
+            video.srcObject = MediaStream;
+            video.play();
+        });
+    }
+
+    function takePhoto() {
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, 200, 200);
+        var face = document.getElementById("face");
+        var canvas1 = document.getElementById('canvas');
+        face.value = canvas1.toDataURL('image/png')
+    }
 </script>
 {% endblock %}
