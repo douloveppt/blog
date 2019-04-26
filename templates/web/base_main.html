@@ -7,7 +7,7 @@
         <nav class="nav" id="topnav">
             <h1 class="logo"><a href="{{ url_for('web.index') }}">王碧波的博客</a></h1>
             <li><a href="{{ url_for('web.index') }}">网站首页</a></li>
-            <li><a href="share.html">栏目分类</a>
+            <li><a href="#">栏目分类</a>
                 <ul class="sub-nav">
                     {% for cate in cates %}
                     <li><a href="{{ url_for('web.category', id=cate.cat_id) }}">{{ cate.cat_name }}</a></li>
