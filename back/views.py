@@ -167,6 +167,8 @@ def face_login():
                 return render_template('back/login.html', error='匹配不成功')
             session['user_id'] = user.user_id
             return redirect(url_for('back.index'))
+        else:
+            return render_template('back/face_login.html', error='登录失败，请重新登录！')
 
 
 @blue_back.route('/logout/', methods=['GET'])
